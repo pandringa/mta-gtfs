@@ -114,4 +114,30 @@ describe('MTA', function () {
     });
   });
 
+  it('should get train positions for the default feed', function () {
+    return mta.positions()
+    .then(function (result){
+      result.should.have.property('positions');
+      Object.values(result.positions).forEach(position => {
+        position.should.have.property('train_id');
+        position.should.have.property('vehicle');
+        position.should.have.property('update');
+      });
+      result.should.have.property('updatedOn');
+    });
+  });
+
+  it('should get train positions for a different feed id', function () {
+    return mta.positions(2)
+    .then(function (result){
+      result.should.have.property('positions');
+      Object.values(result.positions).forEach(position => {
+        position.should.have.property('train_id');
+        position.should.have.property('vehicle');
+        position.should.have.property('update');
+        position.vehicle.trip.route_id.should.equal('L');
+      });
+      result.should.have.property('updatedOn');
+    });
+  });
 });
